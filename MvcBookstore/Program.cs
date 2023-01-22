@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MvcBookstore.Data;
-using Microsoft.Extensions.DependencyInjection;
+using MvcBookstore.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MvcBookstoreContext>(options =>
@@ -18,6 +18,13 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    SeedData.Initialize(services);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
