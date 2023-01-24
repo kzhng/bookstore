@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MvcBookstore.Data;
 using MvcBookstore.Models;
@@ -20,11 +15,28 @@ namespace MvcBookstore.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-              return _context.Book != null ? 
-                          View(await _context.Book.ToListAsync()) :
-                          Problem("Entity set 'MvcBookstoreContext.Book'  is null.");
+            if (_context.Book == null)
+            {
+                return Problem("Entity set 'MvcBookstoreContext.Book'  is null.");
+            }
+
+            var books = from m in _context.Book
+                        select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(s => s.Title!.Contains(searchString));
+            }
+
+            return View(await books.ToListAsync());
+        }
+
+        [HttpPost]
+        public string Index(string searchString, bool notUsed)
+        {
+            return "From [HttpPost]Index: filter on " + searchString;
         }
 
         // GET: Books/Details/5
@@ -150,14 +162,14 @@ namespace MvcBookstore.Controllers
             {
                 _context.Book.Remove(book);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BookExists(int id)
         {
-          return (_context.Book?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Book?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
