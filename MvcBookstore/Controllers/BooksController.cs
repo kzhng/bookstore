@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcBookstore.Data;
 using MvcBookstore.Models;
@@ -15,22 +16,37 @@ namespace MvcBookstore.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string bookCategory, string searchString)
         {
             if (_context.Book == null)
             {
-                return Problem("Entity set 'MvcBookstoreContext.Book'  is null.");
+                return Problem("Entity set 'MvcBookstoreContext.Movie'  is null.");
             }
 
-            var books = from m in _context.Book
-                        select m;
+            // Use LINQ to get list of categories.
+            IQueryable<string> categoryQuery = from b in _context.Book
+                                               orderby b.Category
+                                               select b.Category;
+            var books = from b in _context.Book
+                        select b;
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
                 books = books.Where(s => s.Title!.Contains(searchString));
             }
 
-            return View(await books.ToListAsync());
+            if (!string.IsNullOrEmpty(bookCategory))
+            {
+                books = books.Where(x => x.Category == bookCategory);
+            }
+
+            var bookCategoryVM = new BookCategoryViewModel
+            {
+                Categories = new SelectList(await categoryQuery.Distinct().ToListAsync()),
+                Books = await books.ToListAsync()
+            };
+
+            return View(bookCategoryVM);
         }
 
         [HttpPost]
@@ -48,7 +64,7 @@ namespace MvcBookstore.Controllers
             }
 
             var book = await _context.Book
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(b => b.Id == id);
             if (book == null)
             {
                 return NotFound();
