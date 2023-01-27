@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MvcBookstore.Data;
 
@@ -11,9 +12,11 @@ using MvcBookstore.Data;
 namespace MvcBookstore.Migrations
 {
     [DbContext(typeof(MvcBookstoreContext))]
-    partial class MvcBookstoreContextModelSnapshot : ModelSnapshot
+    [Migration("20230127220704_Status")]
+    partial class Status
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
