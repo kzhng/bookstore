@@ -183,6 +183,51 @@ namespace MvcBookstore.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        // GET: Books/Reserve/5
+        public async Task<IActionResult> Reserve(int? id)
+        {
+            if (id == null || _context.Book == null)
+            {
+                return NotFound();
+            }
+
+            var book = await _context.Book
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            return View(book);
+        }
+
+        // POST: Books/Reserve/5
+        [HttpPost, ActionName("Reserve")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReserveConfirmed(int id)
+        {
+            if (_context.Book == null)
+            {
+                return Problem("Entity set 'MvcBookstoreContext.Book'  is null.");
+            }
+            var book = await _context.Book.FindAsync(id);
+            if (book != null)
+            {
+                if (book.Status != "Available")
+                {
+                    return Problem("It appears that this book has already been reserved.");
+                }
+                else
+                {
+                    book.Status = "Reserved";
+                    _context.Book.Update(book);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
         private bool BookExists(int id)
         {
             return (_context.Book?.Any(e => e.Id == id)).GetValueOrDefault();
