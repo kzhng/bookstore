@@ -84,7 +84,7 @@ namespace MvcBookstore.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,BookId,ReleaseDate,Category,Price,Status")] Book book)
+        public async Task<IActionResult> Create([Bind("Id,Title,BookId,ReleaseDate,Category,Price,Status,ReserveId")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -116,7 +116,7 @@ namespace MvcBookstore.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,BookId,ReleaseDate,Category,Price,Status")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,BookId,ReleaseDate,Category,Price,Status,ReserveId")] Book book)
         {
             if (id != book.Id)
             {
@@ -222,6 +222,8 @@ namespace MvcBookstore.Controllers
                 else
                 {
                     book.Status = "Reserved";
+                    byte[] reserveguid = Guid.NewGuid().ToByteArray();
+                    book.ReserveId = BitConverter.ToInt64(reserveguid, 0);
                     _context.Book.Update(book);
                     await _context.SaveChangesAsync();
                 }

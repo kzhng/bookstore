@@ -34,4 +34,7 @@ public class Book
     [Required]
     [StringLength(10)]
     public string? Status { get; set; } = "Available";
+
+    [Display(Name = "Reservation ID")]
+    public long? ReserveId { get; set; }
 }
