@@ -216,7 +216,7 @@ namespace MvcBookstore.Controllers
             {
                 if (book.Status != "Available")
                 {
-                    return Problem("It appears that this book has already been reserved.");
+                    return View(book);
                 }
                 else
                 {
