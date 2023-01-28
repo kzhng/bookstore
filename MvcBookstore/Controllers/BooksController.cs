@@ -216,6 +216,7 @@ namespace MvcBookstore.Controllers
             {
                 if (book.Status != "Available")
                 {
+                    ModelState.AddModelError(nameof(Book.Status), "Reservation Error: Unfortunately this book has already been reserved.");
                     return View(book);
                 }
                 else
