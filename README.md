@@ -4,7 +4,7 @@
 ```
 Open project on Visual Studio
 Ctrl+Shift+B     // builds project
-Ctrl+F5 // runs project
+Ctrl+F5          // runs project
 ```
 
 ### An online web application system for a bookstore using ASP.NET MVC
