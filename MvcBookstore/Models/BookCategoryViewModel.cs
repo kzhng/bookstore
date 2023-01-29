@@ -2,6 +2,10 @@
 
 namespace MvcBookstore.Models
 {
+    /*
+     * This class is responsible for the view model of the search function in the index page of books.
+     *
+     */
     public class BookCategoryViewModel
     {
         public List<Book>? Books { get; set; }

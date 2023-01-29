@@ -5,6 +5,11 @@ namespace MvcBookstore.Models;
 
 public static class SeedData
 {
+
+    /*
+     * This function will populate the database with three books, namely CQRS for Dummies, Visual Studio Tips, and Nhibernate Cookbook
+     * if the database does not have any books at the moment.
+     */
     public static void Initialize(IServiceProvider serviceProvider)
     {
         using (var context = new MvcBookstoreContext(

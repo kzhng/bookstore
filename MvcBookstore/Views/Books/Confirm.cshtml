@@ -1,12 +1,15 @@
 ﻿@model MvcBookstore.Models.Book
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Reservation confirmed";
 }
 
-<h1>Reservation Confirmed</h1>
+<!-- This is the view responsible for the page when users have successfully made a reservation for a book-->
+
+<h1>Reservation Success</h1>
 
 <h5>Your reservation number: <span>@Html.DisplayFor(model => model.ReserveId)</span></h5>
+
 
 <div>
     <h4>Book</h4>
